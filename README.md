@@ -2,7 +2,7 @@
 [![NPM version](https://badge.fury.io/js/bus.io-common.svg)](http://badge.fury.io/js/bus.io-common)
 [![David DM](https://david-dm.org/turbonetix/bus.io-common.png)](https://david-dm.org/turbonetix/bus.io-common.png)
 
-![Bus.IO](https://raw.github.com/turbonetix/bus.io-common/master/logo.png)
+![Bus.IO](https://raw.github.com/turbonetix/bus.io/master/logo.png)
 
 The common commopnents for bus.io
 
