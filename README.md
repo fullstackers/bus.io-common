@@ -249,8 +249,7 @@ var builder = Builder({actor: 'I'});
 
 ```
 
-### Builder#i(v:String)
-### Builder#actor(v:String)
+### Builder#i(v:String) Builder#actor(v:String)
 
 Sets the `actor` on the message.
 
@@ -260,8 +259,7 @@ builder.i('actor');
 
 ```
 
-### Builder#did(v:String)
-### Builder#action(v:String)
+### Builder#did(v:String) Builder#action(v:String)
 
 Sets the `actor` on the message.
 
@@ -271,8 +269,7 @@ builder.did('action');
 
 ```
 
-### Builder#what(v:mixed)
-### Builder#content(v:mixed)
+### Builder#what(v:mixed) Builder#content(v:mixed)
 
 Sets the `content` on the message.
 
@@ -302,8 +299,7 @@ builder.data({actor:'me', target:'you', action:'say', content:'hello'});
 
 ```
 
-### Builder#deliver()
-### Builder#to()
+### Builder#deliver() Builder#to()
 
 Triggers the `built` event.
 
@@ -317,8 +313,7 @@ builder.deliver();
 
 ```
 
-### Builder#deliver(a,b,c...)
-### Builder#to(a,b,c...)
+### Builder#deliver(a,b,c...) Builder#to(a,b,c...)
 
 You can pass in multiple targets so the builder will build a message
 for each passed in target.
