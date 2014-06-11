@@ -1,0 +1,31 @@
+{
+  "name": "bus.io-common",
+  "version": "0.0.1",
+  "description": "The common components for bus.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/turbonetix/bus.io-common.git"
+  },
+  "keywords": [
+    "bus.io",
+    "common",
+    "component"
+  ],
+  "author": "Nathan G. Romano",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/turbonetix/bus.io-common/issues"
+  },
+  "homepage": "https://github.com/turbonetix/bus.io-common",
+  "devDependencies": {
+    "sandboxed-module": "^1.0.0",
+    "coffee-script": "^1.7.1",
+    "grunt-jasmine-bundle": "^0.2.0",
+    "grunt-cli": "^0.1.13",
+    "grunt": "^0.4.5"
+  }
+}
