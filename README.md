@@ -261,7 +261,7 @@ builder.i('actor');
 
 ### Builder#did(v:String) Builder#action(v:String)
 
-Sets the `actor` on the message.
+Sets the `action` on the message.
 
 ```javascript 
 
