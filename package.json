@@ -1,6 +1,6 @@
 {
   "name": "bus.io-common",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The common components for bus.io",
   "main": "index.js",
   "scripts": {
