@@ -517,8 +517,6 @@ controller.consume();
 
 Install node.js (See download and install instructions here: http://nodejs.org/).
 
-Install redis (See download and install instructions http://redis.io/topics/quickstart)
-
 Clone this repository
 
     > git clone git@github.com:turbonetix/bus.io-common.git
