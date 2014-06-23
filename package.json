@@ -1,6 +1,6 @@
 {
   "name": "bus.io-common",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "The common components for bus.io",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "extend": "^1.2.1",
-    "node-uuid": "^1.4.1"
+    "node-uuid": "^1.4.1",
+    "debug": "~1.0.2"
   }
 }
