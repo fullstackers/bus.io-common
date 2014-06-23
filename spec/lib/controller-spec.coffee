@@ -1,127 +1,151 @@
 
 describe 'Controller', ->
 
-  Given ->
-    setGet = (n) ->
-      (v) ->
-        if typeof v != 'undefined'
-          @data[n] = v
-          return @
-        else
-          return @data[n]
-    @Message = class Message
-      constructor: ->
-        @data =
-          actor: 'me'
-          action: 'say'
-          content: 'hello'
-          target: 'you'
-          created: new Date
-          reference: null
-          id: 1
-      actor: setGet 'actor' 
-      action: setGet 'action'
-      target: setGet 'target'
-      content: setGet 'content'
-      id: setGet 'id'
-      created: setGet 'created'
-      reference: setGet 'reference'
-      published: setGet 'published'
-      clone: ->
-        return new Message
+  Given -> @Message = requireSubject 'lib/message', { }
+  Given -> @Controller = requireSubject 'lib/controller', { './message': @Message }
+  Then -> expect(typeof @Controller).toBe 'function'
 
-  Given -> @Controller = requireSubject 'lib/controller', {
-    './message': @Message
-  }
+  describe '#(message:Message)', ->
 
-  Given -> @message = new @Message
+    Given -> @message = @Message()
+    Given -> @controller = @Controller @message
+    Then -> expect(@controller instanceof @Controller).toBe true
+    And -> expect(@controller.message).toEqual @message
+    And -> expect(@controller.data).toEqual @message.data
 
-  Given ->
-    @controller = @Controller @message
-    spyOn(@controller,'emit').andCallThrough()
-  Then -> expect(@controller instanceof @Controller).toBe true
-  And -> expect(@controller.message).toEqual @message
+  describe 'prototype', ->
 
-  describe '#consume', ->
-    When -> @controller.consume()
-    Then -> expect(@controller.emit).toHaveBeenCalledWith 'consume', @message
-    And -> expect(@message.consumed instanceof Date).toBe true
+    Given -> @data =
+      actor: 'me'
+      target: 'you'
+      content: 'hello'
+      action: 'say'
+      id: 1
+    Given -> @message = @Message @data
+    Given -> @controller = @Controller @message
+    Given -> spyOn(@controller,'emit').andCallThrough()
+
+    describe '#consume', ->
+
+      When -> @controller.consume()
+      Then -> expect(@controller.emit).toHaveBeenCalledWith 'consume', @message
+      And -> expect(@message.consumed instanceof Date).toBe true
 
 
-  describe '#respond (content:Mixed="goodbye")', ->
-    When -> @controller.respond 'goodbye'
-    Then -> expect(@controller.emit).toHaveBeenCalled()
-    And -> expect(@controller.emit.mostRecentCall.args[0]).toBe 'respond'
-    And -> expect(@controller.emit.mostRecentCall.args[1].data.actor).toBe 'you'
-    And -> expect(@controller.emit.mostRecentCall.args[1].data.action).toBe 'say'
-    And -> expect(@controller.emit.mostRecentCall.args[1].data.content).toBe 'goodbye'
-    And -> expect(@controller.emit.mostRecentCall.args[1].data.target).toBe 'me'
-    And -> expect(@controller.emit.mostRecentCall.args[1].data.reference).toBe 1
-    And -> expect(@controller.emit.mostRecentCall.args[1].data.created instanceof Date).toBe true
-    And -> expect(@controller.message.responded instanceof Date).toBe true
+    describe '#respond (content:Mixed="goodbye")', ->
 
-  describe '#deliver', ->
+      When -> @controller.respond 'goodbye'
+      Then -> expect(@controller.emit).toHaveBeenCalled()
+      And -> expect(@controller.emit.mostRecentCall.args[0]).toBe 'respond'
+      And -> expect(@controller.emit.mostRecentCall.args[1].actor()).toBe 'you'
+      And -> expect(@controller.emit.mostRecentCall.args[1].action()).toBe 'say'
+      And -> expect(@controller.emit.mostRecentCall.args[1].content()).toBe 'goodbye'
+      And -> expect(@controller.emit.mostRecentCall.args[1].target()).toBe 'me'
+      And -> expect(@controller.emit.mostRecentCall.args[1].reference()).toBe 1
+      And -> expect(@controller.emit.mostRecentCall.args[1].created() instanceof Date).toBe true
+      And -> expect(@controller.message.responded instanceof Date).toBe true
 
-    context '()', ->
+    describe '#deliver', ->
 
       When -> @controller.deliver()
       Then -> expect(@controller.emit).toHaveBeenCalledWith 'deliver', @message
       And -> expect(@controller.message.delivered instanceof Date).toBe true
 
-    context '(target:String="people")', ->
-      Given ->
-        @m = @message.clone()
-        @m.data.target = 'people'
+    describe '#deliver (target:String="people")', ->
+
+      Given -> @m = @message.clone()
       When -> @controller.deliver 'people'
       Then -> expect(@controller.emit).toHaveBeenCalled()
       And -> expect(@controller.emit.mostRecentCall.args[0]).toBe 'deliver'
-      And -> expect(@controller.emit.mostRecentCall.args[1].data.actor).toBe 'me'
-      And -> expect(@controller.emit.mostRecentCall.args[1].data.action).toBe 'say'
-      And -> expect(@controller.emit.mostRecentCall.args[1].data.content).toBe 'hello'
-      And -> expect(@controller.emit.mostRecentCall.args[1].data.target).toBe 'people'
-      And -> expect(@controller.emit.mostRecentCall.args[1].data.reference).toBe null
-      And -> expect(@controller.emit.mostRecentCall.args[1].data.created instanceof Date).toBe true
+      And -> expect(@controller.emit.mostRecentCall.args[1].actor()).toBe 'me'
+      And -> expect(@controller.emit.mostRecentCall.args[1].action()).toBe 'say'
+      And -> expect(@controller.emit.mostRecentCall.args[1].content()).toBe 'hello'
+      And -> expect(@controller.emit.mostRecentCall.args[1].target()).toBe 'people'
+      And -> expect(@controller.emit.mostRecentCall.args[1].reference()).toBe null
+      And -> expect(@controller.emit.mostRecentCall.args[1].created() instanceof Date).toBe true
       And -> expect(@controller.message.delivered instanceof Date).toBe true
 
-  describe '#actor (v:String="a")', ->
+    describe '#deliver (target:Array=["people"])', ->
 
-    Given -> @v = 'a'
-    Then -> expect(@controller.actor(@v).actor()).toEqual @v
-  
-  describe '#action (v:String="a")', ->
+      Given -> @m = @message.clone()
+      When -> @controller.deliver ['people']
+      Then -> expect(@controller.emit).toHaveBeenCalled()
+      And -> expect(@controller.emit.mostRecentCall.args[0]).toBe 'deliver'
+      And -> expect(@controller.emit.mostRecentCall.args[1].actor()).toBe 'me'
+      And -> expect(@controller.emit.mostRecentCall.args[1].action()).toBe 'say'
+      And -> expect(@controller.emit.mostRecentCall.args[1].content()).toBe 'hello'
+      And -> expect(@controller.emit.mostRecentCall.args[1].target()).toBe 'people'
+      And -> expect(@controller.emit.mostRecentCall.args[1].reference()).toBe null
+      And -> expect(@controller.emit.mostRecentCall.args[1].created() instanceof Date).toBe true
+      And -> expect(@controller.message.delivered instanceof Date).toBe true
 
-    Given -> @v = 'a'
-    Then -> expect(@controller.action(@v).action()).toEqual @v
+    describe '#deliver (a:String="nathan",b:String="zion")', ->
 
-  describe '#target (v:String="a")', ->
+      Given -> @m = @message.clone()
+      When -> @controller.deliver 'nathan', 'zion', 'jason'
+      Then -> expect(@controller.emit).toHaveBeenCalled()
+      And -> expect(@controller.emit.argsForCall[0][0]).toBe 'deliver'
+      And -> expect(@controller.emit.argsForCall[0][1].actor()).toBe 'me'
+      And -> expect(@controller.emit.argsForCall[0][1].action()).toBe 'say'
+      And -> expect(@controller.emit.argsForCall[0][1].content()).toBe 'hello'
+      And -> expect(@controller.emit.argsForCall[0][1].target()).toBe 'nathan'
+      And -> expect(@controller.emit.argsForCall[0][1].reference()).toBe null
+      And -> expect(@controller.emit.argsForCall[0][1].created() instanceof Date).toBe true
+      And -> expect(@controller.emit.argsForCall[1][0]).toBe 'deliver'
+      And -> expect(@controller.emit.argsForCall[1][1].actor()).toBe 'me'
+      And -> expect(@controller.emit.argsForCall[1][1].action()).toBe 'say'
+      And -> expect(@controller.emit.argsForCall[1][1].content()).toBe 'hello'
+      And -> expect(@controller.emit.argsForCall[1][1].target()).toBe 'zion'
+      And -> expect(@controller.emit.argsForCall[1][1].reference()).toBe null
+      And -> expect(@controller.emit.argsForCall[1][1].created() instanceof Date).toBe true
+      And -> expect(@controller.emit.argsForCall[2][0]).toBe 'deliver'
+      And -> expect(@controller.emit.argsForCall[2][1].actor()).toBe 'me'
+      And -> expect(@controller.emit.argsForCall[2][1].action()).toBe 'say'
+      And -> expect(@controller.emit.argsForCall[2][1].content()).toBe 'hello'
+      And -> expect(@controller.emit.argsForCall[2][1].target()).toBe 'jason'
+      And -> expect(@controller.emit.argsForCall[2][1].reference()).toBe null
+      And -> expect(@controller.emit.argsForCall[2][1].created() instanceof Date).toBe true
+      And -> expect(@controller.message.delivered instanceof Date).toBe true
 
-    Given -> @v = 'a'
-    Then -> expect(@controller.target(@v).target()).toEqual @v
+    describe '#actor (v:String="a")', ->
 
-  describe '#content', ->
+      Given -> @v = 'a'
+      Then -> expect(@controller.actor(@v).actor()).toEqual @v
+    
+    describe '#action (v:String="a")', ->
 
-    context '(v:Array=["a"])', ->
+      Given -> @v = 'a'
+      Then -> expect(@controller.action(@v).action()).toEqual @v
 
-      Given -> @v = ['a']
-      Then -> expect(@controller.content(@v).content()).toEqual @v
+    describe '#target (v:String="a")', ->
 
-    context '(v:Object={a:1})', ->
+      Given -> @v = 'a'
+      Then -> expect(@controller.target(@v).target()).toEqual @v
 
-      Given -> @v = a: 1
-      Then -> expect(@controller.content(@v).content()).toEqual @v
+    describe '#content', ->
 
-  describe '#id', ->
+      context '(v:Array=["a"])', ->
 
-    When -> expect(@controller.id()).toEqual @controller.data.id
+        Given -> @v = ['a']
+        Then -> expect(@controller.content(@v).content()).toEqual @v[0]
 
-  describe '#created', ->
+      context '(v:Object={a:1})', ->
 
-    When -> expect(@controller.created()).toEqual @controller.data.created
+        Given -> @v = a: 1
+        Then -> expect(@controller.content(@v).content()).toEqual @v
 
-  describe '#reference', ->
+    describe '#id', ->
 
-    When -> expect(@controller.reference()).toEqual @controller.data.reference
+      When -> expect(@controller.id()).toEqual @controller.message.id()
 
-  describe '#published', ->
+    describe '#created', ->
 
-    When -> expect(@controller.published()).toEqual @controller.data.published
+      When -> expect(@controller.created()).toEqual @controller.message.created()
+
+    describe '#reference', ->
+
+      When -> expect(@controller.reference()).toEqual @controller.message.reference()
+
+    describe '#published', ->
+
+      When -> expect(@controller.published()).toEqual @controller.message.published()
