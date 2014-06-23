@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "extend": "^1.2.1",
-    "node-uuid": "^1.4.1"
+    "node-uuid": "^1.4.1",
+    "debug": "~1.0.2"
   }
 }
