@@ -11,13 +11,11 @@ The common commopnents for bus.io
 Access the common library
 
 ```javascript
-
 var common = require('bus.io-common')
   , Mesage = common.Message
   , Builder = common.Builder
   , Controller = common.Controller
   ;
-
 ```
 
 ## Message
@@ -34,9 +32,7 @@ The message encapulates a few core components.
 Simply creating a mesage.
 
 ```javascript
-
 var message = Mesage();
-
 ```
 
 All positional parameters.
@@ -44,17 +40,13 @@ All positional parameters.
 ### Message#(actor:String, action:String, content:mixed, target:String, created:Date, id:String, reference:String, published:Date)
 
 ```javascript
-
 var message = Message('i', 'said', 'hello', 'you', new Date(), uuid.v1(), null, null);
-
 ```
 
 If you miss any tailing parameters they will be set to defaults which means you can do.
 
 ```javascript
-
 var message = Message('i', 'said', 'hello', 'you');
-
 ```
 
 ### Message#(data:Object)
@@ -62,14 +54,12 @@ var message = Message('i', 'said', 'hello', 'you');
 Pass in an `object` with the attributes.
 
 ```javascript
-
 var message = Message({ 
   actor: 'I', 
   action: 'say',
   content: 'hello',
   target: 'you'
 });
-
 ```
 
 ### Message#(message:Message)
@@ -77,12 +67,10 @@ var message = Message({
 Simply returns the passed instnace
 
 ```javascript
-
 var a = new Message();
 var b = new Message(a);
 
 assert.equal(a, b);
-
 ```
 
 ### Message#clone()
@@ -90,84 +78,66 @@ assert.equal(a, b);
 Returns a cloned instance of this message, however has a new `id`.
 
 ```javascript
-
 var a = new Message();
 var b = a.clone();
 
 assert.notEqual(a.id(), b.id());
-
 ```
 
 ### Message#actor()
 
 ```javascript
-
 var actor = message.actor();
-
 ```
 
 ### Message#actor(v:String)
 
 ```javascript
-
 var actor = message.actor('me').actor();
 
 assert.equal(actor, 'me');
-
 ```
 
 ### Message#action()
 
 ```javascript
-
 var action = message.action();
-
 ```
 
 ### Message#action(v:String)
 
 ```javascript
-
 var action = message.action('spoke').action();
 
 assert.equal(action, 'spoke');
-
 ```
 
 ### Message#content()
 
 ```javascript
-
 var content = message.content();
-
 ```
 
 ### Message#content(v:mixed)
 
 ```javascript
-
 var content = message.content('stuff').content();
 
 assert.equal(content, 'stuff');
-
 ```
 
 ### Message#target()
 
 ```javascript
-
 var target = message.target();
-
 ```
 
 ### Message#target(v:String)
 
 ```javascript
-
 var target = message.target('spoke').target();
 
 assert.equal(target, 'spoke');
-
 ```
 
 ### Message#id()
@@ -175,9 +145,7 @@ assert.equal(target, 'spoke');
 Gets the message `id` which is a UUID version 1.
 
 ```javascript
-
 var id = message.id();
-
 ```
 
 ### Message#created()
@@ -185,11 +153,9 @@ var id = message.id();
 Gets the time message was `created`.
 
 ```javascript
-
 var created = message.created();
 
 assert.equal(created intanceof Date, true);
-
 ```
 
 ### Message#reference()
@@ -197,9 +163,7 @@ assert.equal(created intanceof Date, true);
 Gets the `id` of the message in which this message references.
 
 ```javascript
-
 var reference = message.reference();
-
 ```
 
 ### Message#published()
@@ -207,9 +171,7 @@ var reference = message.reference();
 Gets the time in which the message was published or `null` if it wasn't.
 
 ```javscript
-
 var published = message.published();
-
 ```
 
 ## Builder
@@ -220,12 +182,10 @@ building a message it publishes a `built` event with the `Message` instance.
 To listen to the `built` event.
 
 ```javascript
-
 var builder = Builder();
 builder.on('built', function (message) {
   // do something with the message
 });
-
 ```
 
 ### Builder#()
@@ -233,9 +193,7 @@ builder.on('built', function (message) {
 Gets a builder instance and uses internally a blank `Message` instance.
 
 ```javascript
-
 var builder = Builder();
-
 ```
 
 ### Builder#(data:Mixed)
@@ -244,9 +202,7 @@ An `Object` instance or a `Message` instance or `null` value can be passed in.  
 will be base for the object being built.
 
 ```javascript
-
 var builder = Builder({actor: 'I'});
-
 ```
 
 ### Builder#i(v:String) Builder#actor(v:String)
@@ -254,9 +210,7 @@ var builder = Builder({actor: 'I'});
 Sets the `actor` on the message.
 
 ```javascript 
-
 builder.i('actor');
-
 ```
 
 ### Builder#did(v:String) Builder#action(v:String)
@@ -264,9 +218,7 @@ builder.i('actor');
 Sets the `action` on the message.
 
 ```javascript 
-
 builder.did('action');
-
 ```
 
 ### Builder#what(v:mixed) Builder#content(v:mixed)
@@ -274,9 +226,7 @@ builder.did('action');
 Sets the `content` on the message.
 
 ```javascript 
-
 builder.what('some content');
-
 ```
 
 ### Builder#data()
@@ -284,9 +234,7 @@ builder.what('some content');
 Gets the message data.
 
 ```javascript 
-
 var data = builder.data();
-
 ```
 
 ### Builder#data(v:Object)
@@ -294,9 +242,7 @@ var data = builder.data();
 Gets the message data.
 
 ```javascript 
-
 builder.data({actor:'me', target:'you', action:'say', content:'hello'});
-
 ```
 
 ### Builder#deliver() Builder#to()
@@ -304,13 +250,11 @@ builder.data({actor:'me', target:'you', action:'say', content:'hello'});
 Triggers the `built` event.
 
 ```javascript
-
 builder.on('built', function (message) {
   console.log('the message', message);
 });
 
 builder.deliver();
-
 ```
 
 ### Builder#deliver(a,b,c...) Builder#to(a,b,c...)
@@ -319,9 +263,7 @@ You can pass in multiple targets so the builder will build a message
 for each passed in target.
 
 ```javascript
-
 builder.to('joe','jim','john','jack');
-
 ```
 
 ## Controller
@@ -334,81 +276,63 @@ it is controlling.  The controller will emit an event when you manipulate the me
 The `message` must be a `Message` instance.
 
 ```javascript
-
 var controller = Controller( Message() );
-
 ```
 
 ### Controller#actor()
 
 ```javascript
-
 var actor = controller.actor();
-
 ```
 
 ### Controller#actor(v:String)
 
 ```javascript
-
 var actor = controller.actor('me').actor();
 
 assert.equal(actor, 'me');
-
 ```
 
 ### Controller#action()
 
 ```javascript
-
 var action = controller.action();
-
 ```
 
 ### Controller#action(v:String)
 
 ```javascript
-
 var action = controller.action('spoke').action();
 
 assert.equal(action, 'spoke');
-
 ```
 
 ### Controller#content()
 
 ```javascript
-
 var content = controller.content();
-
 ```
 
 ### Controller#content(v:mixed)
 
 ```javascript
-
 var content = controller.content('stuff').content();
 
 assert.equal(content, 'stuff');
-
 ```
 
 ### Controller#target()
 
 ```javascript
-
 var target = controller.target();
-
 ```
 
 ### Controller#target(v:String)
 
 ```javascript
-
 var target = controller.target('spoke').target();
 
 assert.equal(target, 'spoke');
-
 ```
 
 ### Controller#id()
@@ -416,9 +340,7 @@ assert.equal(target, 'spoke');
 Gets the message `id` which is a UUID version 1.
 
 ```javascript
-
 var id = controller.id();
-
 ```
 
 ### Controller#created()
@@ -426,11 +348,9 @@ var id = controller.id();
 Gets the time the message was `created`.
 
 ```javascript
-
 var created = controller.created();
 
 assert.equal(created intanceof Date, true);
-
 ```
 
 ### Controller#reference()
@@ -438,9 +358,7 @@ assert.equal(created intanceof Date, true);
 Gets the `id` of the message in which this controller references.
 
 ```javascript
-
 var reference = controller.reference();
-
 ```
 
 ### Controller#published()
@@ -448,9 +366,7 @@ var reference = controller.reference();
 Gets the time in which the message was published or `null` if it wasn't.
 
 ```javscript
-
 var published = controller.published();
-
 ```
 
 ### Controller#respond(content:Mixed)
@@ -460,13 +376,11 @@ actor and target are swapped and the new content is replaced with the passed in
 argument.  Calling `respond` will stop propagation of the message in any of the event handlers.
 
 ```javascript
-
 contoller.on('respond', function (message) {
   console.log('message', message);
 });
 
 controller.respond('hello');
-
 ```
 
 ### Controller#deliver()
@@ -477,13 +391,11 @@ Calling `deliver` will stop propagation of the message in any of the event handl
 
 
 ```javascript
-
 contoller.on('deliver', function (message) {
   console.log('message', message);
 });
 
 controller.deliver();
-
 ```
 
 ### Controller#deliver(a,b,c...)
@@ -493,13 +405,11 @@ you deliver a message to the targret. Calling `deliver` will stop propagation of
 in any of the event handlers.
 
 ```javascript
-
 contoller.on('deliver', function (message) {
   console.log('message', message);
 });
 
 controller.deliver('you', 'me', 'dupree');
-
 ```
 
 ### Controller#consume()
@@ -508,9 +418,7 @@ This will consume the message and propagation of the message either to the bus, 
 to the socket will be halted.
 
 ```javascript
-
 controller.consume();
-
 ```
 
 # Installation and Environment Setup
@@ -541,5 +449,3 @@ Tests are run using grunt.  You must first globally install the grunt-cli with n
 To run the tests, just run grunt
 
     > grunt spec
-
-## TODO
