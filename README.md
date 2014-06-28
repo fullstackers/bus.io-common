@@ -205,6 +205,62 @@ will be base for the object being built.
 var builder = Builder({actor: 'I'});
 ```
 
+### Builder#content(v:mixed)
+
+```javascript
+var content = builder.content('stuff').content();
+
+assert.equal(content, 'stuff');
+```
+
+### Builder#target()
+
+```javascript
+var target = builder.target();
+```
+
+### Builder#target(v:String)
+
+```javascript
+var target = builder.target('spoke').target();
+
+assert.equal(target, 'spoke');
+```
+
+### Builder#id()
+
+Gets the message `id` which is a UUID version 1.
+
+```javascript
+var id = builder.id();
+```
+
+### Builder#created()
+
+Gets the time the message was `created`.
+
+```javascript
+var created = builder.created();
+
+assert.equal(created intanceof Date, true);
+```
+
+### Builder#reference()
+
+Gets the `id` of the message in which this builder references.
+
+```javascript
+var reference = builder.reference();
+```
+
+### Builder#published()
+
+Gets the time in which the message was published or `null` if it wasn't.
+
+```javscript
+var published = builder.published();
+```
+
 ### Builder#i(v:String) Builder#actor(v:String)
 
 Sets the `actor` on the message.

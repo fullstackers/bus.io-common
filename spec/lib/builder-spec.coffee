@@ -9,29 +9,48 @@ describe 'Builder', ->
 
     Given -> @builder = @Builder()
     
-    describe '#actor', ->
+    describe '#actor (v:String="a")', ->
 
-      Given -> @p = 'you'
-      When -> @builder.actor @p 
-      Then -> expect(@builder.actor()).toBe @p
+      Given -> @v = 'a'
+      Then -> expect(@builder.actor(@v).actor()).toEqual @v
+    
+    describe '#action (v:String="a")', ->
 
-    describe '#target', ->
+      Given -> @v = 'a'
+      Then -> expect(@builder.action(@v).action()).toEqual @v
 
-      Given -> @p = 'you'
-      When -> @builder.target @p
-      Then -> expect(@builder.target()).toBe @p
+    describe '#target (v:String="a")', ->
+
+      Given -> @v = 'a'
+      Then -> expect(@builder.target(@v).target()).toEqual @v
 
     describe '#content', ->
 
-      Given -> @p = 'you'
-      When -> @builder.content @p
-      Then -> expect(@builder.content()).toBe @p
+      context '(v:Array=["a"])', ->
 
-    describe '#action', ->
+        Given -> @v = ['a']
+        Then -> expect(@builder.content(@v).content()).toEqual @v[0]
 
-      Given -> @p = 'you'
-      When -> @builder.action @p
-      Then -> expect(@builder.action()).toBe @p
+      context '(v:Object={a:1})', ->
+
+        Given -> @v = a: 1
+        Then -> expect(@builder.content(@v).content()).toEqual @v
+
+    describe '#id', ->
+
+      When -> expect(@builder.id()).toEqual @builder.message.id()
+
+    describe '#created', ->
+
+      When -> expect(@builder.created()).toEqual @builder.message.created()
+
+    describe '#reference', ->
+
+      When -> expect(@builder.reference()).toEqual @builder.message.reference()
+
+    describe '#published', ->
+
+      When -> expect(@builder.published()).toEqual @builder.message.published()
 
     describe '#i', ->
 
