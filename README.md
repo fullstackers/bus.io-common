@@ -295,7 +295,7 @@ var data = builder.data();
 
 ### Builder#data(v:Object)
 
-Gets the message data.
+Sets the message data.
 
 ```javascript 
 builder.data({actor:'me', target:'you', action:'say', content:'hello'});
