@@ -107,6 +107,15 @@ describe 'Controller', ->
       And -> expect(@controller.emit.argsForCall[2][1].created() instanceof Date).toBe true
       And -> expect(@controller.message.delivered instanceof Date).toBe true
 
+    describe.only '#errored', ->
+
+      Given -> @err = 'Some Error'
+      Given -> spyOn(@controller,'action').andCallThrough()
+      Given -> spyOn(@controller,'respond')
+      When -> @controller.errored @err
+      Then -> expect(@controller.action).toHaveBeenCalledWith 'say errored'
+      And -> expect(@controller.respond).toHaveBeenCalledWith @err
+
     describe '#actor (v:String="a")', ->
 
       Given -> @v = 'a'

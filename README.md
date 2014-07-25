@@ -477,6 +477,14 @@ to the socket will be halted.
 controller.consume();
 ```
 
+### Controller#errored(err:Error)
+
+When processing a message you decide that you want to *respond* with an error simply call `errored`.
+
+```javascript
+controller.errored(new Error('Some Error'));
+```
+
 # Installation and Environment Setup
 
 Install node.js (See download and install instructions here: http://nodejs.org/).
