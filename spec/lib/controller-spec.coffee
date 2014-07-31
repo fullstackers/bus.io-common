@@ -31,6 +31,18 @@ describe 'Controller', ->
       Then -> expect(@controller.emit).toHaveBeenCalledWith 'consume', @message
       And -> expect(@message.consumed instanceof Date).toBe true
 
+    describe '#respond', ->
+
+      When -> @controller.respond()
+      Then -> expect(@controller.emit).toHaveBeenCalled()
+      And -> expect(@controller.emit.mostRecentCall.args[0]).toBe 'respond'
+      And -> expect(@controller.emit.mostRecentCall.args[1].actor()).toBe 'you'
+      And -> expect(@controller.emit.mostRecentCall.args[1].action()).toBe 'say'
+      And -> expect(@controller.emit.mostRecentCall.args[1].content()).toBe @data.content
+      And -> expect(@controller.emit.mostRecentCall.args[1].target()).toBe 'me'
+      And -> expect(@controller.emit.mostRecentCall.args[1].reference()).toBe 1
+      And -> expect(@controller.emit.mostRecentCall.args[1].created() instanceof Date).toBe true
+      And -> expect(@controller.message.responded instanceof Date).toBe true
 
     describe '#respond (content:Mixed="goodbye")', ->
 
@@ -107,7 +119,7 @@ describe 'Controller', ->
       And -> expect(@controller.emit.argsForCall[2][1].created() instanceof Date).toBe true
       And -> expect(@controller.message.delivered instanceof Date).toBe true
 
-    describe.only '#errored', ->
+    describe '#errored', ->
 
       Given -> @err = 'Some Error'
       Given -> spyOn(@controller,'action').andCallThrough()
